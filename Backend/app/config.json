@@ -1,0 +1,7 @@
+{
+    "project_id": "vertex-ai-image-428313",
+    "location": "us-central1",
+    "model_name_pro": "gemini-1.5-pro-001",
+    "model_name_flash": "gemini-1.5-flash-001",
+    "upload_dir": "./uploaded_images"
+}

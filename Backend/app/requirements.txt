@@ -1,0 +1,12 @@
+fastapi
+uvicorn
+pydantic
+pyngrok
+colabcode
+nest_asyncio
+Pillow
+mimetypes
+google-api-core
+vertexai
+re
+asyncio

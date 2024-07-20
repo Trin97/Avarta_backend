@@ -1,15 +1,26 @@
-from fastapi import FastAPI, Form, HTTPException, Request
-from fastapi.responses import HTMLResponse, RedirectResponse
+import asyncio
+from fastapi import FastAPI, Form, HTTPException, Request, File, UploadFile
+from fastapi.responses import HTMLResponse, RedirectResponse, JSONResponse
 from fastapi.templating import Jinja2Templates
+from fastapi.middleware.cors import CORSMiddleware
 from email_validator import validate_email, EmailNotValidError
 from app.auth_factory import AuthFactory
 from app.concrete_factory import UserAuthFactory
+from app.image_processing import ImageHandler
 
 app = FastAPI()
 
 templates = Jinja2Templates(directory="templates")
 
 auth_factory: AuthFactory = UserAuthFactory()
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 @app.get("/", response_class=HTMLResponse)
 async def index(request: Request):
@@ -56,6 +67,12 @@ async def register_post(request: Request, email: str = Form(...), password: str 
 @app.post("/home", response_class=HTMLResponse)
 async def home(request: Request):
     return templates.TemplateResponse("home.html", {"request": request})
+
+handler = ImageHandler()
+
+@app.post("/upload/")
+async def upload_image(file: UploadFile = File(...)):
+    return await handler.upload_image(file)
 
 if __name__ == "__main__":
     import uvicorn
